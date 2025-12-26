@@ -1,0 +1,398 @@
+import { useState, useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { getCMSData } from '../../../utils/cms';
+import CaptchaComponent from './CaptchaComponent';
+
+interface ContactInfoContent {
+  title?: string;
+  companyName?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  facebookUrl?: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+}
+
+const defaultContactInfo: ContactInfoContent = {
+  title: 'Have questions?\nGet in touch!',
+  companyName: 'Venwind Refex Power Limited',
+  address: '6th Floor, Refex Towers, Sterling Road Signal,\n313, Valluvar Kottam High Road,\nNungambakkam, Chennai – 600034, Tamil Nadu',
+  phone: '+91 (44) 69908410',
+  email: 'contact@venwindrefex.com',
+  facebookUrl: 'https://www.facebook.com/refexindustrieslimited/',
+  twitterUrl: 'https://x.com/GroupRefex',
+  linkedinUrl: 'https://www.linkedin.com/company/refex-group/',
+  instagramUrl: 'https://www.instagram.com/refexgroup/',
+  youtubeUrl: 'https://www.youtube.com/@refexgroup',
+};
+
+export default function ContactFormSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfoContent>(defaultContactInfo);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+
+    const fetchContent = async () => {
+      try {
+        const result = await getCMSData('contact', 'contact-info', {
+          defaultValue: defaultContactInfo,
+        });
+        setContactInfo({
+          title: (result.data?.title && typeof result.data.title === 'string' && result.data.title.trim()) 
+            ? result.data.title 
+            : defaultContactInfo.title,
+          companyName: (result.data?.companyName && typeof result.data.companyName === 'string' && result.data.companyName.trim()) 
+            ? result.data.companyName 
+            : defaultContactInfo.companyName,
+          address: (result.data?.address && typeof result.data.address === 'string' && result.data.address.trim()) 
+            ? result.data.address 
+            : defaultContactInfo.address,
+          phone: (result.data?.phone && typeof result.data.phone === 'string' && result.data.phone.trim()) 
+            ? result.data.phone 
+            : defaultContactInfo.phone,
+          email: (result.data?.email && typeof result.data.email === 'string' && result.data.email.trim()) 
+            ? result.data.email 
+            : defaultContactInfo.email,
+          facebookUrl: (result.data?.facebookUrl && typeof result.data.facebookUrl === 'string' && result.data.facebookUrl.trim()) 
+            ? result.data.facebookUrl 
+            : defaultContactInfo.facebookUrl,
+          twitterUrl: (result.data?.twitterUrl && typeof result.data.twitterUrl === 'string' && result.data.twitterUrl.trim()) 
+            ? result.data.twitterUrl 
+            : defaultContactInfo.twitterUrl,
+          linkedinUrl: (result.data?.linkedinUrl && typeof result.data.linkedinUrl === 'string' && result.data.linkedinUrl.trim()) 
+            ? result.data.linkedinUrl 
+            : defaultContactInfo.linkedinUrl,
+          instagramUrl: (result.data?.instagramUrl && typeof result.data.instagramUrl === 'string' && result.data.instagramUrl.trim()) 
+            ? result.data.instagramUrl 
+            : defaultContactInfo.instagramUrl,
+          youtubeUrl: (result.data?.youtubeUrl && typeof result.data.youtubeUrl === 'string' && result.data.youtubeUrl.trim()) 
+            ? result.data.youtubeUrl 
+            : defaultContactInfo.youtubeUrl,
+        });
+      } catch (error) {
+        console.error('Error loading contact info:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContent();
+
+    const handleCmsUpdate = (e: CustomEvent) => {
+      if (e.detail.page === 'contact' && e.detail.section === 'contact-info') {
+        fetchContent();
+      }
+    };
+    window.addEventListener('cmsUpdate', handleCmsUpdate as EventListener);
+
+    return () => {
+      window.removeEventListener('cmsUpdate', handleCmsUpdate as EventListener);
+    };
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === 'message' && value.length > 500) return;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!captchaVerified) {
+      alert('Please complete the captcha verification');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const formBody = new URLSearchParams();
+      formBody.append('name', formData.name);
+      formBody.append('email', formData.email);
+      formBody.append('phone', formData.phone);
+      formBody.append('company', formData.company);
+      formBody.append('message', formData.message);
+
+      const response = await fetch('https://readdy.ai/api/form/d4g4a6lfv7b2bv2ngi6g', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formBody.toString(),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+        setCaptchaVerified(false);
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Left Column - Contact Info */}
+          <div data-aos="fade-right">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight whitespace-pre-line">
+              {contactInfo.title || defaultContactInfo.title}
+            </h2>
+            
+            {/* Address */}
+            <div className="flex items-start mb-6">
+              <div className="w-6 h-6 flex items-center justify-center mr-4 mt-1">
+                <i className="ri-map-pin-line text-gray-500 text-xl"></i>
+              </div>
+              <div>
+                <p className="text-gray-900 font-bold mb-1">{contactInfo.companyName || defaultContactInfo.companyName}</p>
+                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+                  {contactInfo.address || defaultContactInfo.address}
+                </p>
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="flex items-start mb-6">
+              <div className="w-6 h-6 flex items-center justify-center mr-4 mt-1">
+                <i className="ri-smartphone-line text-gray-500 text-xl"></i>
+              </div>
+              <div>
+                <a 
+                  href={`tel:${contactInfo.phone || defaultContactInfo.phone}`}
+                  className="text-gray-600 text-sm hover:text-[#8DC63F] transition-colors"
+                >
+                  {contactInfo.phone || defaultContactInfo.phone}
+                </a>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="flex items-start mb-8">
+              <div className="w-6 h-6 flex items-center justify-center mr-4 mt-1">
+                <i className="ri-mail-line text-gray-500 text-xl"></i>
+              </div>
+              <div>
+                <a 
+                  href={`mailto:${contactInfo.email || defaultContactInfo.email}`}
+                  className="text-gray-600 text-sm hover:text-[#8DC63F] transition-colors"
+                >
+                  {contactInfo.email || defaultContactInfo.email}
+                </a>
+              </div>
+            </div>
+
+            {/* Social Media */}
+            <div className="flex items-center space-x-4">
+              {contactInfo.facebookUrl && (
+                <a 
+                  href={contactInfo.facebookUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#8DC63F] hover:text-[#7AB62F] transition-colors cursor-pointer"
+                >
+                  <i className="ri-facebook-fill text-xl"></i>
+                </a>
+              )}
+              {contactInfo.twitterUrl && (
+                <a 
+                  href={contactInfo.twitterUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#8DC63F] hover:text-[#7AB62F] transition-colors cursor-pointer"
+                >
+                  <i className="ri-twitter-x-fill text-xl"></i>
+                </a>
+              )}
+              {contactInfo.linkedinUrl && (
+                <a 
+                  href={contactInfo.linkedinUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#8DC63F] hover:text-[#7AB62F] transition-colors cursor-pointer"
+                >
+                  <i className="ri-linkedin-fill text-xl"></i>
+                </a>
+              )}
+              {contactInfo.instagramUrl && (
+                <a 
+                  href={contactInfo.instagramUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#8DC63F] hover:text-[#7AB62F] transition-colors cursor-pointer"
+                >
+                  <i className="ri-instagram-fill text-xl"></i>
+                </a>
+              )}
+              {contactInfo.youtubeUrl && (
+                <a 
+                  href={contactInfo.youtubeUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#8DC63F] hover:text-[#7AB62F] transition-colors cursor-pointer"
+                >
+                  <i className="ri-youtube-fill text-xl"></i>
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Right Column - Contact Form */}
+          <div data-aos="fade-left">
+            <form 
+              id="contact-form"
+              data-readdy-form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name */}
+                <div className="relative">
+                  <div className="flex items-center border-b border-gray-300 pb-2">
+                    <i className="ri-user-line text-gray-400 mr-3"></i>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Name"
+                      required
+                      className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="relative">
+                  <div className="flex items-center border-b border-gray-300 pb-2">
+                    <i className="ri-mail-line text-gray-400 mr-3"></i>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Email Address"
+                      required
+                      className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Phone */}
+                <div className="relative">
+                  <div className="flex items-center border-b border-gray-300 pb-2">
+                    <i className="ri-phone-line text-gray-400 mr-3"></i>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Phone"
+                      required
+                      className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Company */}
+                <div className="relative">
+                  <div className="flex items-center border-b border-gray-300 pb-2">
+                    <i className="ri-building-line text-gray-400 mr-3"></i>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      placeholder="Company"
+                      required
+                      className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="relative">
+                <div className="flex items-start border-b border-gray-300 pb-2">
+                  <i className="ri-edit-line text-gray-400 mr-3 mt-1"></i>
+                  <div className="w-full">
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Message"
+                      required
+                      rows={4}
+                      maxLength={500}
+                      className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-sm resize-none"
+                    />
+                    <div className="text-right text-xs text-gray-400">
+                      {formData.message.length}/500
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Captcha */}
+              <div>
+                <CaptchaComponent onVerify={setCaptchaVerified} />
+              </div>
+
+              {/* Submit Button */}
+              <div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-[#8DC63F] hover:bg-[#7AB62F] text-white px-8 py-3 rounded-md font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex items-center"
+                >
+                  <i className="ri-send-plane-fill mr-2"></i>
+                  {isSubmitting ? 'Sending...' : 'Get In Touch'}
+                </button>
+              </div>
+
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <div className="bg-[#8DC63F]/10 border border-[#8DC63F]/30 text-gray-800 px-4 py-3 rounded-md text-sm">
+                  Thank you for your message! We will get back to you soon.
+                </div>
+              )}
+              {submitStatus === 'error' && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                  Something went wrong. Please try again later.
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

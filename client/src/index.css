@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent horizontal scrolling and overscroll */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
+}
