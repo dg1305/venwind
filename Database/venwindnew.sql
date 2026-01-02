@@ -249,7 +249,7 @@ CREATE TABLE `cms_content` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_page_section` (`page`,`section`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,7 +258,7 @@ CREATE TABLE `cms_content` (
 
 LOCK TABLES `cms_content` WRITE;
 /*!40000 ALTER TABLE `cms_content` DISABLE KEYS */;
-INSERT INTO `cms_content` VALUES (1,'home','hero','{\"title\": \"Revolutionizing Wind Energy\", \"subtitle\": \"Explore the power of cutting-edge wind turbine manufacturing technology in partnership with Vensys Energy AG, Germany \", \"videoUrl\": \"https://venwindrefex.com/wp-content/uploads/2025/01/5097121_Aerial-View_Alternative_1920x1080-1.mp4\", \"bgImageUrl\": \"\", \"buttonLink\": \"\", \"buttonText\": \"Learn more\"}','2025-11-27 12:54:04','2025-11-28 04:55:44'),(5,'about','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-27 18:54:33','2025-11-28 04:58:10'),(8,'about','introduction','{\"label\": \"\", \"title\": \"Pioneering the Future of Renewable Energy\", \"imageUrl\": \"\", \"paragraph1\": \"Venwind Refex, a partnership between Refex and Venwind, aims to transform wind energy in India through innovation and sustainability, delivering advanced turbine technology and manufacturing excellence.\", \"paragraph2\": \"Venwind Refex strives to be a leading wind turbine OEM in India, combining global expertise with local insight. Our advanced facility is set to produce 5.3 MW turbines, aiming for a 5 GW annual capacity within five years.\", \"overlayText\": \"\"}','2025-11-27 19:06:27','2025-11-27 19:37:48'),(19,'about','partnership','{\"title\": \"\", \"partnerships\": []}','2025-11-27 19:18:10','2025-11-27 19:18:23'),(26,'products','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-27 19:43:46','2025-11-27 19:43:59'),(28,'products','intro','{\"title\": \"\", \"paragraph1\": \"\", \"paragraph2\": \"\", \"paragraph3\": \"\"}','2025-11-27 19:44:37','2025-11-27 19:44:55'),(30,'products','specifications','{\"items\": [], \"title\": \"\"}','2025-11-27 19:46:11','2025-11-27 19:46:24'),(32,'technology','hero','{\"title\": \"\", \"bgImageUrl\": \"http://localhost:8080/uploads/images/image-1765002372198-444463982.png\"}','2025-11-27 19:53:57','2025-12-06 06:26:13'),(34,'technology','intro','{\"label\": \"\", \"title\": \"\", \"imageUrl\": \"\", \"listItems\": [\"Permanent magnet synchronous generator and full-scale power converter enables rapid dispatch response, more active power/frequency, reactive power/voltage control, and smoother fault voltage ride-through\", \"Reduced maintenance as a result of elimination of high-speed couplings and slip ring carbon brushes, cutting fault rates by 70% compared to DFIG wind turbines\"]}','2025-11-27 19:54:28','2025-12-06 07:37:05'),(37,'sustainability','hero','{\"title\": \"Sustainability\", \"bgImageUrl\": \"\"}','2025-11-27 20:22:39','2025-11-27 20:24:22'),(38,'sustainability','future-goals','{\"title\": \"Future goals\", \"bgImageUrl\": \"\", \"description\": \"Scale up production to meet India’s renewable targets and continue R&D investments for enhanced turbine efficiency.\"}','2025-11-27 20:24:04','2025-11-28 04:36:20'),(49,'contact','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-28 04:54:47','2025-11-28 04:54:57'),(52,'home','differentiators','{\"title\": \"\", \"feature1Desc\": \"\", \"feature2Desc\": \"\", \"feature3Desc\": \"\", \"feature1Image\": \"\", \"feature1Title\": \"\", \"feature2Image\": \"\", \"feature2Title\": \"\", \"feature3Image\": \"\", \"feature3Title\": \"\"}','2025-11-28 04:56:05','2025-11-28 04:56:25'),(60,'technology','technical-advantages','{\"items\": [], \"title\": \"\", \"imageUrl\": \"http://localhost:8080/uploads/images/image-1765168852249-707771714.png\"}','2025-12-06 07:01:56','2025-12-08 04:40:54'),(75,'technology','advantages','{\"items\": [], \"title\": \"\", \"imageUrl\": \"http://localhost:8080/uploads/images/image-1765007383466-820726344.png\"}','2025-12-06 07:46:54','2025-12-06 07:49:45'),(78,'technology','benefits','{\"items\": [], \"title\": \"\", \"imageUrl\": \"http://localhost:8080/uploads/images/image-1765007417165-878985520.png\"}','2025-12-06 07:50:19','2025-12-06 07:50:19'),(82,'investor-relations','annual-return_fy-2024-25','{\"title\": \"\", \"content\": \"\", \"documents\": []}','2025-12-30 08:42:24','2025-12-30 09:14:46');
+INSERT INTO `cms_content` VALUES (1,'home','hero','{\"title\": \"Revolutionizing Wind Energy\", \"subtitle\": \"Explore the power of cutting-edge wind turbine manufacturing technology in partnership with Vensys Energy AG, Germany , \", \"videoUrl\": \"https://venwindrefex.com/wp-content/uploads/2025/01/5097121_Aerial-View_Alternative_1920x1080-1.mp4\", \"bgImageUrl\": \"\", \"buttonLink\": \"\", \"buttonText\": \"Learn more\"}','2025-11-27 12:54:04','2026-01-02 07:27:56'),(5,'about','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-27 18:54:33','2025-11-28 04:58:10'),(8,'about','introduction','{\"label\": \"\", \"title\": \"Pioneering the Future of Renewable Energy\", \"imageUrl\": \"\", \"paragraph1\": \"Venwind Refex, a partnership between Refex and Venwind, aims to transform wind energy in India through innovation and sustainability, delivering advanced turbine technology and manufacturing excellence.\", \"paragraph2\": \"Venwind Refex strives to be a leading wind turbine OEM in India, combining global expertise with local insight. Our advanced facility is set to produce 5.3 MW turbines, aiming for a 5 GW annual capacity within five years.\", \"overlayText\": \"\"}','2025-11-27 19:06:27','2025-11-27 19:37:48'),(19,'about','partnership','{\"title\": \"\", \"partnerships\": []}','2025-11-27 19:18:10','2025-11-27 19:18:23'),(26,'products','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-27 19:43:46','2025-11-27 19:43:59'),(28,'products','intro','{\"title\": \"\", \"paragraph1\": \"\", \"paragraph2\": \"\", \"paragraph3\": \"\"}','2025-11-27 19:44:37','2025-11-27 19:44:55'),(30,'products','specifications','{\"items\": [], \"title\": \"\"}','2025-11-27 19:46:11','2025-11-27 19:46:24'),(32,'technology','hero','{\"title\": \"\", \"bgImageUrl\": \"/uploads/images/image-1767339960352-849759935.png\"}','2025-11-27 19:53:57','2026-01-02 07:46:03'),(34,'technology','intro','{\"label\": \"\", \"title\": \"\", \"imageUrl\": \"\", \"listItems\": [\"Permanent magnet synchronous generator and full-scale power converter enables rapid dispatch response, more active power/frequency, reactive power/voltage control, and smoother fault voltage ride-through\", \"Reduced maintenance as a result of elimination of high-speed couplings and slip ring carbon brushes, cutting fault rates by 70% compared to DFIG wind turbines\"]}','2025-11-27 19:54:28','2025-12-06 07:37:05'),(37,'sustainability','hero','{\"title\": \"Sustainability\", \"bgImageUrl\": \"\"}','2025-11-27 20:22:39','2025-11-27 20:24:22'),(38,'sustainability','future-goals','{\"title\": \"Future goals\", \"bgImageUrl\": \"\", \"description\": \"Scale up production to meet India’s renewable targets and continue R&D investments for enhanced turbine efficiency.\"}','2025-11-27 20:24:04','2025-11-28 04:36:20'),(49,'contact','hero','{\"title\": \"\", \"bgImageUrl\": \"\"}','2025-11-28 04:54:47','2025-11-28 04:54:57'),(52,'home','differentiators','{\"title\": \"\", \"feature1Desc\": \"\", \"feature2Desc\": \"\", \"feature3Desc\": \"\", \"feature1Image\": \"\", \"feature1Title\": \"\", \"feature2Image\": \"\", \"feature2Title\": \"\", \"feature3Image\": \"\", \"feature3Title\": \"\"}','2025-11-28 04:56:05','2025-11-28 04:56:25'),(60,'technology','technical-advantages','{\"items\": [], \"title\": \"\", \"imageUrl\": \"/uploads/images/image-1767347614285-860715426.png\"}','2025-12-06 07:01:56','2026-01-02 09:53:38'),(75,'technology','advantages','{\"items\": [], \"title\": \"\", \"imageUrl\": \"/uploads/images/image-1767347642136-237859913.png\"}','2025-12-06 07:46:54','2026-01-02 09:54:04'),(78,'technology','benefits','{\"items\": [], \"title\": \"\", \"imageUrl\": \"/uploads/images/image-1767347665292-842851903.png\"}','2025-12-06 07:50:19','2026-01-02 09:54:28'),(82,'investor-relations','annual-return_fy-2024-25','{\"title\": \"\", \"content\": \"\", \"documents\": []}','2025-12-30 08:42:24','2025-12-30 09:14:46');
 /*!40000 ALTER TABLE `cms_content` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,6 +437,7 @@ CREATE TABLE `login_histories` (
 
 LOCK TABLES `login_histories` WRITE;
 /*!40000 ALTER TABLE `login_histories` DISABLE KEYS */;
+INSERT INTO `login_histories` VALUES ('06b4bbcd-df2a-4329-9c10-a42895bb00a1','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:30:35','2026-01-02 09:30:35'),('27b6ab7f-98cb-42ce-80bf-3737694c8cdb','6730a7a7-6923-4048-bfd9-1f3943331472','Logged-In','2026-01-02 09:46:55','2026-01-02 09:46:55'),('2b6fee33-61dd-434a-813d-4cbed613f703','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:31:41','2026-01-02 09:31:41'),('32a41b5e-8215-48c9-b9b7-97439719b581','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:31:39','2026-01-02 09:31:39'),('5bcf8231-5172-48fb-82d8-ece7962bbe6c','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:42:13','2026-01-02 09:42:13'),('645083c6-96e0-48d6-9cfe-59e51a89cd9c','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:46:28','2026-01-02 09:46:28'),('9a12de9a-f1c3-4344-8cda-a0bbeeae3615','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:29:50','2026-01-02 09:29:50'),('bc37d65c-4fff-4dbb-9efe-fa977db59721','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:31:41','2026-01-02 09:31:41'),('c451c4af-42c7-413d-bf82-8ed9dd031165','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:48:58','2026-01-02 09:48:58'),('cbd12c34-a64e-4781-a8ab-3aa090704ef1','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:32:06','2026-01-02 09:32:06'),('cd788d74-d920-4ab4-bdab-d6027642e892','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 09:30:37','2026-01-02 09:30:37'),('edc4092f-dcd0-4823-ae9a-2c5920d45053','f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Logged-In','2026-01-02 10:22:16','2026-01-02 10:22:16');
 /*!40000 ALTER TABLE `login_histories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -832,7 +833,7 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `api_key` text,
-  `user_type` enum('Admin','CHRO','HR') DEFAULT NULL,
+  `user_type` enum('Admin','Investors') DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `created_by` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `modified_by` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
@@ -840,7 +841,40 @@ CREATE TABLE `users` (
   `created_at` datetime NOT NULL,
   `modified_at` datetime NOT NULL,
   `deleted_at` datetime DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `username_2` (`username`),
+  UNIQUE KEY `username_3` (`username`),
+  UNIQUE KEY `username_4` (`username`),
+  UNIQUE KEY `username_5` (`username`),
+  UNIQUE KEY `username_6` (`username`),
+  UNIQUE KEY `username_7` (`username`),
+  UNIQUE KEY `username_8` (`username`),
+  UNIQUE KEY `username_9` (`username`),
+  UNIQUE KEY `username_10` (`username`),
+  UNIQUE KEY `username_11` (`username`),
+  UNIQUE KEY `username_12` (`username`),
+  UNIQUE KEY `username_13` (`username`),
+  UNIQUE KEY `username_14` (`username`),
+  UNIQUE KEY `username_15` (`username`),
+  UNIQUE KEY `username_16` (`username`),
+  UNIQUE KEY `username_17` (`username`),
+  UNIQUE KEY `username_18` (`username`),
+  UNIQUE KEY `username_19` (`username`),
+  UNIQUE KEY `username_20` (`username`),
+  UNIQUE KEY `username_21` (`username`),
+  UNIQUE KEY `username_22` (`username`),
+  UNIQUE KEY `username_23` (`username`),
+  UNIQUE KEY `username_24` (`username`),
+  UNIQUE KEY `username_25` (`username`),
+  UNIQUE KEY `username_26` (`username`),
+  UNIQUE KEY `username_27` (`username`),
+  UNIQUE KEY `username_28` (`username`),
+  UNIQUE KEY `username_29` (`username`),
+  UNIQUE KEY `username_30` (`username`),
+  UNIQUE KEY `username_31` (`username`),
+  UNIQUE KEY `username_32` (`username`),
   KEY `created_by` (`created_by`),
   KEY `modified_by` (`modified_by`),
   KEY `deleted_by` (`deleted_by`),
@@ -856,6 +890,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('6730a7a7-6923-4048-bfd9-1f3943331472','Investors','User',NULL,'investors@venwind.com','$2b$10$E2j8ULkEZevMhIcg4SnxKuj81K1/dzHgpw5.3XDQ75VM.iBkBlyV2',NULL,'Investors',1,NULL,NULL,NULL,'2026-01-02 07:59:29','2026-01-02 07:59:29',NULL,'investors'),('f16b885a-cd01-4e78-8acc-b7a8b7abcf28','Admin','User',NULL,'admin@venwind.com','$2b$10$7O5wdHvxIfa.UkWqvulZluIgmVzOl7cy8gJ3qwPRL93iOHG4GZRkW',NULL,'Admin',1,NULL,NULL,NULL,'2026-01-02 07:59:29','2026-01-02 07:59:29',NULL,'admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -906,4 +941,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-30 16:58:46
+-- Dump completed on 2026-01-02 16:18:26
