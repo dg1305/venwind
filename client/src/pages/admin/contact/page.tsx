@@ -46,6 +46,9 @@ export default function AdminContactPage() {
       dataObj.linkedinUrl = (formData.get('linkedinUrl') as string)?.trim() || '';
       dataObj.instagramUrl = (formData.get('instagramUrl') as string)?.trim() || '';
       dataObj.youtubeUrl = (formData.get('youtubeUrl') as string)?.trim() || '';
+    } else if (section === 'email-config') {
+      dataObj.senderEmail = (formData.get('senderEmail') as string)?.trim() || '';
+      dataObj.receiverEmail = (formData.get('receiverEmail') as string)?.trim() || '';
     } else if (section === 'map') {
       dataObj.mapUrl = (formData.get('mapUrl') as string)?.trim() || '';
     } else {
@@ -78,7 +81,7 @@ export default function AdminContactPage() {
     );
   }
 
-  const sections = ['hero', 'contact-info', 'map'];
+  const sections = ['hero', 'contact-info', 'email-config', 'map'];
 
   return (
     <AdminLayout pageName="Contact" pagePath="/contact">
@@ -180,6 +183,43 @@ export default function AdminContactPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">YouTube URL</label>
                     <input type="url" name="youtubeUrl" defaultValue={getFieldValue('contact-info', 'youtubeUrl')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://www.youtube.com/..." />
                   </div>
+                </div>
+                <button type="submit" className="w-full px-6 py-3 bg-[#8DC63F] text-white rounded-lg hover:bg-[#7AB62F] transition-colors">
+                  <i className="ri-save-line mr-2"></i>Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Email Configuration Section */}
+        {activeSection === 'email-config' && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Email Configuration</h2>
+            <p className="text-sm text-gray-600 mb-6">Configure where contact form emails are sent from and received.</p>
+            <form onSubmit={(e) => handleSubmit(e, 'email-config')}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Sender Email (From)</label>
+                  <input 
+                    type="email" 
+                    name="senderEmail" 
+                    defaultValue={getFieldValue('email-config', 'senderEmail') || 'crm@refex.co.in'} 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" 
+                    placeholder="crm@refex.co.in" 
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Email address that will appear as the sender of contact form emails</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Receiver Email (To)</label>
+                  <input 
+                    type="email" 
+                    name="receiverEmail" 
+                    defaultValue={getFieldValue('email-config', 'receiverEmail') || 'contact@venwindrefex.com'} 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" 
+                    placeholder="contact@venwindrefex.com" 
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Email address where contact form submissions will be sent. Default: contact@venwindrefex.com</p>
                 </div>
                 <button type="submit" className="w-full px-6 py-3 bg-[#8DC63F] text-white rounded-lg hover:bg-[#7AB62F] transition-colors">
                   <i className="ri-save-line mr-2"></i>Save Changes

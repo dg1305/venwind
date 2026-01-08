@@ -118,6 +118,11 @@ export default function ApplicationSection() {
       return;
     }
 
+    if (!resumeFile) {
+      alert('Please upload your resume. Resume is required.');
+      return;
+    }
+
     if (formData.message.length > 500) {
       alert('Message must be less than 500 characters');
       return;
@@ -127,23 +132,30 @@ export default function ApplicationSection() {
     setSubmitStatus('idle');
 
     try {
-      const submitData = new URLSearchParams();
+      const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+      const apiUrl = API_BASE_URL ? `${API_BASE_URL}/api/careers-application` : '/api/careers-application';
+
+      // Create FormData for file upload
+      const submitData = new FormData();
       submitData.append('firstName', formData.firstName);
       submitData.append('lastName', formData.lastName);
       submitData.append('email', formData.email);
       submitData.append('phone', formData.phone);
       submitData.append('message', formData.message);
-      submitData.append('resume', resumeFile ? 'Uncollectable' : 'No file uploaded');
+      submitData.append('recaptchaToken', 'verified'); // Custom captcha is already verified
+      
+      if (resumeFile) {
+        submitData.append('resume', resumeFile);
+      }
 
-      const response = await fetch('https://readdy.ai/api/form/d4g46sdfv7b2bv2ngi4g', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: submitData.toString()
+        body: submitData,
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         setSubmitStatus('success');
         setFormData({
           firstName: '',
@@ -157,9 +169,15 @@ export default function ApplicationSection() {
         setCaptchaVerified(false);
       } else {
         setSubmitStatus('error');
+        const errorMessage = result.message || result.error || 'Unknown error occurred';
+        console.error('Application submission error:', errorMessage, result.errors);
+        alert(`Error: ${errorMessage}${result.errors ? '\n' + result.errors.map((e: any) => e.msg).join('\n') : ''}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       setSubmitStatus('error');
+      const errorMessage = error.message || 'Network error. Please check your connection and try again.';
+      console.error('Application submission error:', error);
+      alert(`Error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -191,7 +209,7 @@ export default function ApplicationSection() {
           <div className="bg-white">
             <h2 className="text-gray-900 text-3xl md:text-4xl font-bold mb-8">{content.formTitle || defaultContent.formTitle}</h2>
             
-            <form onSubmit={handleSubmit} data-readdy-form id="careers-application">
+            <form onSubmit={handleSubmit} id="careers-application">
               {/* Name Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="relative">
@@ -227,7 +245,7 @@ export default function ApplicationSection() {
                 <div className="relative">
                   <i className="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                   <input
-                    type="email"
+                    type="text"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -276,19 +294,23 @@ export default function ApplicationSection() {
               <div className="mb-6">
                 <label className="inline-block bg-gray-900 text-white px-6 py-3 rounded cursor-pointer hover:bg-gray-800 transition-colors whitespace-nowrap">
                   <i className="ri-upload-2-line mr-2"></i>
-                  Upload Resume
+                  Upload Resume <span className="text-red-500">*</span>
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
                     onChange={handleFileChange}
+                    required
                     className="hidden"
                   />
                 </label>
                 {fileName && (
                   <span className="ml-4 text-sm text-gray-600">{fileName}</span>
                 )}
+                {!fileName && (
+                  <span className="ml-4 text-sm text-red-600">Resume is required</span>
+                )}
                 <p className="text-xs text-gray-500 mt-2">
-                  (Upload your resume in .doc, .pdf, or .docx format, less than 10 MB.)
+                  (Upload your resume in .doc, .pdf, or .docx format, less than 10 MB. <span className="text-red-500 font-semibold">Required</span>)
                 </p>
               </div>
 

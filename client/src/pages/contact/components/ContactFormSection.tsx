@@ -157,11 +157,15 @@ export default function ContactFormSection() {
         setCaptchaVerified(false);
       } else {
         setSubmitStatus('error');
-        console.error('Form submission error:', result.message || 'Unknown error');
+        const errorMessage = result.message || result.error || 'Unknown error occurred';
+        console.error('Form submission error:', errorMessage, result.errors);
+        alert(`Error: ${errorMessage}${result.errors ? '\n' + result.errors.map((e: any) => e.msg).join('\n') : ''}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       setSubmitStatus('error');
+      const errorMessage = error.message || 'Network error. Please check your connection and try again.';
       console.error('Form submission error:', error);
+      alert(`Error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -293,7 +297,6 @@ export default function ContactFormSection() {
           <div data-aos="fade-left">
             <form 
               id="contact-form"
-              data-readdy-form
               onSubmit={handleSubmit}
               className="space-y-6"
             >

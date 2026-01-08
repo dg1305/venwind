@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const emailService = require('../services/email_service');
 const { body, validationResult } = require('express-validator');
+const { CmsContent } = require('../models');
 
 // Contact form submission endpoint
 router.post('/contact-form', [
@@ -14,14 +15,26 @@ router.post('/contact-form', [
     .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
   
   body('email')
-    .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email address'),
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .custom((value) => {
+      // Basic email format check - just check it contains @ and has some characters
+      if (!value || !value.includes('@') || value.length < 3) {
+        throw new Error('Please provide a valid email address');
+      }
+      return true;
+    }),
   
   body('phone')
     .optional()
-    .isMobilePhone()
-    .withMessage('Please provide a valid phone number'),
+    .trim()
+    .custom((value) => {
+      if (!value || value.trim() === '') return true; // Allow empty
+      // Allow any phone format - just check it's not too long
+      return value.length <= 50;
+    })
+    .withMessage('Phone number must be less than 50 characters'),
   
   body('company')
     .optional()
@@ -66,12 +79,36 @@ router.post('/contact-form', [
       timestamp: new Date().toISOString()
     };
 
-    // Send email to contact@venwindrefex.com
-    const emailResult = await emailService.sendContactFormEmail(formData);
+    // Fetch email configuration from CMS
+    // Default sender is SMTP_USER (must match authenticated account)
+    let senderEmail = process.env.SMTP_USER || null; // Will use SMTP_USER in email service
+    let receiverEmail = 'contact@venwindrefex.com'; // Default receiver
+    
+    try {
+      const emailConfig = await CmsContent.findOne({
+        where: { page: 'contact', section: 'email-config' },
+      });
+      
+      if (emailConfig && emailConfig.data) {
+        // Sender email from CMS (used for display name/reply-to, but actual from will be SMTP_USER)
+        if (emailConfig.data.senderEmail && emailConfig.data.senderEmail.trim()) {
+          senderEmail = emailConfig.data.senderEmail.trim();
+        }
+        // Receiver email from CMS (where emails are actually sent)
+        if (emailConfig.data.receiverEmail && emailConfig.data.receiverEmail.trim()) {
+          receiverEmail = emailConfig.data.receiverEmail.trim();
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to fetch email config from CMS, using defaults:', error.message);
+    }
+
+    // Send email with configured sender and receiver
+    const emailResult = await emailService.sendContactFormEmail(formData, senderEmail, receiverEmail);
 
     // Send auto-reply to customer (optional - you can remove this if not needed)
     try {
-      await emailService.sendAutoReply(email, name);
+      await emailService.sendAutoReply(email, name, senderEmail);
     } catch (autoReplyError) {
       console.warn('Auto-reply failed, but main email was sent:', autoReplyError.message);
     }
