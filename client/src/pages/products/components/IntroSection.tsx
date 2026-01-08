@@ -68,22 +68,22 @@ export default function IntroSection() {
   }
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <h2 className="text-gray-900 text-4xl lg:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+        <h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-10 sm:mb-12 md:mb-16" data-aos="fade-up">
           {content.title || defaultContent.title}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
-          <div className="text-gray-700 text-base leading-relaxed" data-aos="fade-up">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 mb-12 sm:mb-16 md:mb-20">
+          <div className="text-gray-700 text-sm sm:text-base leading-relaxed" data-aos="fade-up">
             {content.paragraph1 || defaultContent.paragraph1}
           </div>
           
-          <div className="text-gray-700 text-base leading-relaxed" data-aos="fade-up">
+          <div className="text-gray-700 text-sm sm:text-base leading-relaxed" data-aos="fade-up">
             {content.paragraph2 || defaultContent.paragraph2}
           </div>
           
-          <div className="text-gray-700 text-base leading-relaxed" data-aos="fade-up">
+          <div className="text-gray-700 text-sm sm:text-base leading-relaxed" data-aos="fade-up">
             {content.paragraph3 || defaultContent.paragraph3}
           </div>
         </div>

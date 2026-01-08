@@ -100,7 +100,7 @@ export default function HeroSection() {
 
   return (
     <section 
-        className="relative h-[350px] w-full overflow-hidden bg-cover bg-center bg-no-repeat"
+        className="relative h-[250px] sm:h-[300px] md:h-[350px] w-full overflow-hidden bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: imageLoaded 
             ? `url(${imageUrl})` 
@@ -112,8 +112,8 @@ export default function HeroSection() {
         }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold">{heroContent.title || 'Products'}</h1>
+        <div className="relative z-10 h-full flex items-center justify-center px-4">
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center">{heroContent.title || 'Products'}</h1>
         </div>
       </section>
   );

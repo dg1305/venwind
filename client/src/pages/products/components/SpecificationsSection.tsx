@@ -148,34 +148,34 @@ export default function SpecificationsSection() {
       </div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-16 relative z-10">
-        <h2 className="text-gray-900 text-4xl lg:text-5xl font-bold text-center mb-20" data-aos="fade-up">
+        <h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12 sm:mb-16 md:mb-20" data-aos="fade-up">
           {content.title || 'Technical Specifications'}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
           {specs.slice(0, 3).map((spec, index) => (
             <div 
               key={index} 
               className="text-center"
               data-aos="fade-up"
             >
-              <h2 className="text-gray-900 text-6xl font-bold mb-4" dangerouslySetInnerHTML={{ __html: spec.value }}></h2>
+              <h2 className="text-gray-900 text-4xl sm:text-5xl md:text-6xl font-bold mb-4" dangerouslySetInnerHTML={{ __html: spec.value }}></h2>
               <div className="w-24 h-1 bg-[#8DC63F] mx-auto mb-4"></div>
-              <h5 className="text-gray-700 text-lg font-semibold">{spec.label}</h5>
+              <h5 className="text-gray-700 text-base sm:text-lg font-semibold">{spec.label}</h5>
             </div>
           ))}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
           {specs.slice(3).map((spec, index) => (
             <div 
               key={index} 
               className="text-center"
               data-aos="fade-up"
             >
-              <h2 className="text-gray-900 text-6xl font-bold mb-4">{spec.value}</h2>
+              <h2 className="text-gray-900 text-4xl sm:text-5xl md:text-6xl font-bold mb-4">{spec.value}</h2>
               <div className="w-24 h-1 bg-[#8DC63F] mx-auto mb-4"></div>
-              <h5 className="text-gray-700 text-lg font-semibold">{spec.label}</h5>
+              <h5 className="text-gray-700 text-base sm:text-lg font-semibold">{spec.label}</h5>
             </div>
           ))}
         </div>

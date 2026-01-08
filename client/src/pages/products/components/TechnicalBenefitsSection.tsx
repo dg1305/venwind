@@ -99,25 +99,26 @@ export default function TechnicalBenefitsSection() {
   return (
     <section className="py-20 bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <h2 className="text-white text-4xl lg:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+        <h2 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-10 sm:mb-12 md:mb-16" data-aos="fade-up">
           {content.title || 'Technical Benefits'}
         </h2>
         
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {benefits.map((benefit, index) => (
             <div key={index}>
               <div 
-                className="border-b border-gray-700 pb-8"
+                className="border-b border-gray-700 pb-6 sm:pb-8"
                 data-aos="fade-up"
               >
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-center">
                   <div className="md:col-span-2 flex justify-center md:justify-start">
-                    <div className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center hover:bg-[#8DC63F] hover:border-[#8DC63F] transition-all duration-300 cursor-pointer group">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-white flex items-center justify-center hover:bg-[#8DC63F] hover:border-[#8DC63F] transition-all duration-300 cursor-pointer group">
                       {benefit.icon && benefit.icon.trim() && (benefit.icon.startsWith('http') || benefit.icon.startsWith('/') || (benefit.icon.includes('.') && !benefit.icon.startsWith('ri-'))) ? (
                         <img 
                           src={normalizeImageUrl(benefit.icon)} 
                           alt={benefit.title}
-                          className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300"
+                          className="w-8 h-8 sm:w-10 sm:h-10 object-contain group-hover:scale-110 transition-transform duration-300"
+                          loading="lazy"
                           onError={(e) => {
                             // Fallback to RemixIcon if image fails to load
                             const target = e.target as HTMLImageElement;
@@ -127,23 +128,23 @@ export default function TechnicalBenefitsSection() {
                               const iconIndex = defaultBenefits.findIndex(b => b.title === benefit.title);
                               const fallbackIcon = iconIndex >= 0 ? defaultBenefits[iconIndex].icon : 'ri-settings-3-line';
                               const iconElement = document.createElement('i');
-                              iconElement.className = `${fallbackIcon} text-2xl group-hover:rotate-180 transition-transform duration-500`;
+                              iconElement.className = `${fallbackIcon} text-xl sm:text-2xl group-hover:rotate-180 transition-transform duration-500`;
                               parent.appendChild(iconElement);
                             }
                           }}
                         />
                       ) : (
-                        <i className={`${benefit.icon || defaultBenefits[index]?.icon || 'ri-settings-3-line'} text-2xl group-hover:rotate-180 transition-transform duration-500`}></i>
+                        <i className={`${benefit.icon || defaultBenefits[index]?.icon || 'ri-settings-3-line'} text-xl sm:text-2xl group-hover:rotate-180 transition-transform duration-500`}></i>
                       )}
                     </div>
                   </div>
                   
-                  <div className="md:col-span-4">
-                    <h3 className="text-white text-2xl font-bold">{benefit.title}</h3>
+                  <div className="md:col-span-4 text-center md:text-left">
+                    <h3 className="text-white text-xl sm:text-2xl font-bold">{benefit.title}</h3>
                   </div>
                   
-                  <div className="md:col-span-6">
-                    <p className="text-gray-300 text-base leading-relaxed">{benefit.description}</p>
+                  <div className="md:col-span-6 text-center md:text-left">
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{benefit.description}</p>
                   </div>
                 </div>
               </div>

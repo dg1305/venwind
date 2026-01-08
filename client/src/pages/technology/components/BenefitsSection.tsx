@@ -90,15 +90,16 @@ export default function BenefitsSection() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Image Left */}
           {content.imageUrl && (
-            <div className="hidden lg:block" data-aos="fade-right">
-              <div className="w-full overflow-hidden">
+            <div className="block mb-8 lg:mb-0" data-aos="fade-right">
+              <div className="w-full overflow-hidden rounded-lg">
                 <img 
                   src={normalizeImageUrl(content.imageUrl)}
                   alt="Other benefits"
                   className="w-full h-auto object-contain"
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -107,7 +108,7 @@ export default function BenefitsSection() {
           {/* Content Right */}
           <div className={content.imageUrl ? '' : 'lg:col-span-2'}>
             <div className="mb-6" data-aos="fade-left">
-              <h2 className="text-gray-900 text-3xl font-semibold mb-6">
+              <h2 className="text-gray-900 text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6">
                 {content.title || 'Other Benefits'}
               </h2>
             </div>

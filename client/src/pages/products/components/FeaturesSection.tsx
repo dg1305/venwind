@@ -104,24 +104,25 @@ export default function FeaturesSection() {
   return (
     <section className="py-20 bg-[#f5f7f0]">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <h2 className="text-gray-900 text-4xl lg:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+        <h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-10 sm:mb-12 md:mb-16" data-aos="fade-up">
           {content.title || 'Why choose the GWH182-5.3MW wind turbine?'}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
           {features.slice(0, 3).map((feature, index) => (
             <div 
               key={index} 
               className="text-center"
               data-aos="fade-up"
             >
-              <div className="flex justify-center mb-6">
-                <div className="w-24 h-24 rounded-full bg-[#8DC63F]/10 flex items-center justify-center hover:bg-[#8DC63F] hover:scale-110 transition-all duration-300 cursor-pointer group">
+              <div className="flex justify-center mb-4 sm:mb-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#8DC63F]/10 flex items-center justify-center hover:bg-[#8DC63F] hover:scale-110 transition-all duration-300 cursor-pointer group">
                   {feature.icon && feature.icon.trim() && (feature.icon.startsWith('http') || feature.icon.startsWith('/') || (feature.icon.includes('.') && !feature.icon.startsWith('ri-'))) ? (
                     <img 
                       src={normalizeImageUrl(feature.icon)} 
                       alt={feature.title}
-                      className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                      className="w-12 h-12 sm:w-16 sm:h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                      loading="lazy"
                       onError={(e) => {
                         // Fallback to RemixIcon if image fails to load
                         const target = e.target as HTMLImageElement;
@@ -131,23 +132,23 @@ export default function FeaturesSection() {
                           const iconIndex = defaultFeatures.findIndex(f => f.title === feature.title);
                           const fallbackIcon = iconIndex >= 0 ? defaultFeatures[iconIndex].icon : 'ri-settings-3-line';
                           const iconElement = document.createElement('i');
-                          iconElement.className = `${fallbackIcon} text-[#8DC63F] text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`;
+                          iconElement.className = `${fallbackIcon} text-[#8DC63F] text-4xl sm:text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`;
                           parent.appendChild(iconElement);
                         }
                       }}
                     />
                   ) : (
-                    <i className={`${feature.icon || defaultFeatures[index]?.icon || 'ri-settings-3-line'} text-[#8DC63F] text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`}></i>
+                    <i className={`${feature.icon || defaultFeatures[index]?.icon || 'ri-settings-3-line'} text-[#8DC63F] text-4xl sm:text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`}></i>
                   )}
                 </div>
               </div>
-              <h4 className="text-gray-900 text-xl font-bold mb-4">{feature.title}</h4>
-              <p className="text-gray-700 text-base leading-relaxed">{feature.description}</p>
+              <h4 className="text-gray-900 text-lg sm:text-xl font-bold mb-3 sm:mb-4">{feature.title}</h4>
+              <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
           {features.slice(3).map((feature, idx) => {
             const index = idx + 3;
             return (
@@ -156,13 +157,14 @@ export default function FeaturesSection() {
                 className="text-center"
                 data-aos="fade-up"
               >
-                <div className="flex justify-center mb-6">
-                  <div className="w-24 h-24 rounded-full bg-[#8DC63F]/10 flex items-center justify-center hover:bg-[#8DC63F] hover:scale-110 transition-all duration-300 cursor-pointer group">
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#8DC63F]/10 flex items-center justify-center hover:bg-[#8DC63F] hover:scale-110 transition-all duration-300 cursor-pointer group">
                     {feature.icon && feature.icon.trim() && (feature.icon.startsWith('http') || feature.icon.startsWith('/') || (feature.icon.includes('.') && !feature.icon.startsWith('ri-'))) ? (
                       <img 
                         src={normalizeImageUrl(feature.icon)} 
                         alt={feature.title}
-                        className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                        className="w-12 h-12 sm:w-16 sm:h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                        loading="lazy"
                         onError={(e) => {
                           // Fallback to RemixIcon if image fails to load
                           const target = e.target as HTMLImageElement;
@@ -172,18 +174,18 @@ export default function FeaturesSection() {
                             const iconIndex = defaultFeatures.findIndex(f => f.title === feature.title);
                             const fallbackIcon = iconIndex >= 0 ? defaultFeatures[iconIndex].icon : 'ri-settings-3-line';
                             const iconElement = document.createElement('i');
-                            iconElement.className = `${fallbackIcon} text-[#8DC63F] text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`;
+                            iconElement.className = `${fallbackIcon} text-[#8DC63F] text-4xl sm:text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`;
                             parent.appendChild(iconElement);
                           }
                         }}
                       />
                     ) : (
-                      <i className={`${feature.icon || defaultFeatures[index]?.icon || 'ri-settings-3-line'} text-[#8DC63F] text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`}></i>
+                      <i className={`${feature.icon || defaultFeatures[index]?.icon || 'ri-settings-3-line'} text-[#8DC63F] text-4xl sm:text-5xl group-hover:text-white group-hover:rotate-12 transition-all duration-300`}></i>
                     )}
                   </div>
                 </div>
-                <h4 className="text-gray-900 text-xl font-bold mb-4">{feature.title}</h4>
-                <p className="text-gray-700 text-base leading-relaxed">{feature.description}</p>
+                <h4 className="text-gray-900 text-lg sm:text-xl font-bold mb-3 sm:mb-4">{feature.title}</h4>
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{feature.description}</p>
               </div>
             );
           })}

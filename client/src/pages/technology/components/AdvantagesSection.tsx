@@ -123,11 +123,11 @@ export default function AdvantagesSection() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
           {/* Content Left */}
-          <div ref={contentRef} className={content.imageUrl ? '' : 'lg:col-span-2'}>
+          <div ref={contentRef} className={content.imageUrl ? 'order-2 lg:order-1' : 'lg:col-span-2'}>
             <div className="mb-6" data-aos="fade-right">
-              <h2 className="text-gray-900 text-3xl font-semibold mb-6">
+              <h2 className="text-gray-900 text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6">
                 {content.title || 'Advantages over Competitors'}
               </h2>
             </div>
@@ -193,12 +193,13 @@ export default function AdvantagesSection() {
 
           {/* Image Right */}
           {content.imageUrl && (
-            <div ref={imageContainerRef} className="hidden lg:flex items-center" data-aos="fade-left">
-              <div className="w-full h-full overflow-hidden">  
+            <div ref={imageContainerRef} className="block lg:flex mb-8 lg:mb-0 order-1 lg:order-2 items-center min-h-[300px] sm:min-h-[400px] lg:min-h-auto" data-aos="fade-left">
+              <div className="w-full h-full overflow-hidden rounded-lg">  
                 <img 
                   src={normalizeImageUrl(content.imageUrl)}
                   alt="Advantages over competitors"
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
             </div>

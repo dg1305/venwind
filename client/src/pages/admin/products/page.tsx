@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AdminLayout, { API_BASE_URL } from '../components/AdminLayout';
+import AdminLayout, { API_BASE_URL, deleteUploadedFile } from '../components/AdminLayout';
 import { useCMSData } from '../hooks/useCMSData';
 
 export default function AdminProductsPage() {
@@ -62,6 +62,46 @@ export default function AdminProductsPage() {
     } finally {
       setUploadingIcons(prev => ({ ...prev, [uploadKey]: false }));
       e.target.value = '';
+    }
+  };
+
+  const handleRemoveFile = async (fieldName: string, currentValue?: string) => {
+    if (!confirm('Are you sure you want to remove this file? If it was uploaded to the server, it will be deleted.')) {
+      return;
+    }
+
+    try {
+      // Get the current value from parameter, state, or input field
+      const input = document.querySelector(`input[name="${fieldName}"]`) as HTMLInputElement;
+      const value = currentValue || iconUrls[fieldName] || (input?.value || '');
+      
+      // If it's a server-uploaded file (contains /uploads/), try to delete it from server
+      if (value && (value.includes('/uploads/') || value.includes('uploads/'))) {
+        const success = await deleteUploadedFile(value);
+        if (!success) {
+          // If deletion fails, still clear the field (might be external URL that looks like upload path)
+          console.warn('File deletion failed, but clearing field anyway');
+        }
+      }
+
+      // Clear the input field
+      if (input) {
+        input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      // Clear from state
+      setIconUrls(prev => {
+        const updated = { ...prev };
+        delete updated[fieldName];
+        return updated;
+      });
+
+      alert('File removed successfully! Click "Save Changes" to save.');
+    } catch (error) {
+      console.error('Error removing file:', error);
+      alert('Failed to remove file. Please try again.');
     }
   };
 
@@ -261,13 +301,38 @@ export default function AdminProductsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Background Image URL</label>
-                  <input type="url" name="bgImageUrl" defaultValue={getFieldValue('hero', 'bgImageUrl')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/hero-bg.jpg" />
-                  <div className="mt-2">
-                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'bgImageUrl')} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer" />
+                  <div className="flex gap-2">
+                    <input type="text" name="bgImageUrl" defaultValue={getFieldValue('hero', 'bgImageUrl')} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/hero-bg.jpg" />
+                    {(getFieldValue('hero', 'bgImageUrl') || iconUrls['bgImageUrl']) && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFile('bgImageUrl', iconUrls['bgImageUrl'] || getFieldValue('hero', 'bgImageUrl'))}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+                        title="Remove image"
+                      >
+                        <i className="ri-delete-bin-line mr-1"></i>Remove
+                      </button>
+                    )}
                   </div>
-                  {getFieldValue('hero', 'bgImageUrl') && (
+                  <div className="mt-2">
+                    <label className="block text-xs text-gray-600 mb-1">Or upload image:</label>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => handleImageUpload(e, 'bgImageUrl')} 
+                      disabled={uploadingIcons['bgImageUrl']}
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" 
+                    />
+                    {uploadingIcons['bgImageUrl'] && (
+                      <div className="mt-1 text-xs text-blue-600 flex items-center">
+                        <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Uploading...
+                      </div>
+                    )}
+                  </div>
+                  {(getFieldValue('hero', 'bgImageUrl') || iconUrls['bgImageUrl']) && (
                     <div className="mt-2">
-                      <img src={getFieldValue('hero', 'bgImageUrl')} alt="Preview" className="w-full h-32 object-cover rounded-lg border border-gray-200" />
+                      <img src={iconUrls['bgImageUrl'] || getFieldValue('hero', 'bgImageUrl')} alt="Preview" className="w-full h-32 object-cover rounded-lg border border-gray-200" />
                     </div>
                   )}
                 </div>
@@ -361,23 +426,33 @@ export default function AdminProductsPage() {
                             </div>
                             {currentIconUrl && (
                               <div className="mt-2">
-                                {isIconImage ? (
-                                  <div className="flex items-center gap-2">
-                                    <img 
-                                      src={currentIconUrl} 
-                                      alt={`Icon ${num}`} 
-                                      className="w-12 h-12 object-contain rounded border border-gray-200 bg-white p-1" 
-                                    />
-                                    <span className="text-xs text-gray-500">Icon Preview</span>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-12 h-12 rounded-full bg-[#8DC63F]/10 flex items-center justify-center">
-                                      <i className={`${currentIconUrl} text-[#8DC63F] text-2xl`}></i>
+                                <div className="flex items-center justify-between gap-2">
+                                  {isIconImage ? (
+                                    <div className="flex items-center gap-2">
+                                      <img 
+                                        src={currentIconUrl} 
+                                        alt={`Icon ${num}`} 
+                                        className="w-12 h-12 object-contain rounded border border-gray-200 bg-white p-1" 
+                                      />
+                                      <span className="text-xs text-gray-500">Icon Preview</span>
                                     </div>
-                                    <span className="text-xs text-gray-500">RemixIcon Preview</span>
-                                  </div>
-                                )}
+                                  ) : (
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-12 h-12 rounded-full bg-[#8DC63F]/10 flex items-center justify-center">
+                                        <i className={`${currentIconUrl} text-[#8DC63F] text-2xl`}></i>
+                                      </div>
+                                      <span className="text-xs text-gray-500">RemixIcon Preview</span>
+                                    </div>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveFile(iconFieldName, currentIconUrl)}
+                                    className="px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+                                    title="Remove icon"
+                                  >
+                                    <i className="ri-delete-bin-line"></i>
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>
@@ -491,23 +566,33 @@ export default function AdminProductsPage() {
                             </div>
                             {currentIconUrl && (
                               <div className="mt-2">
-                                {isIconImage ? (
-                                  <div className="flex items-center gap-2">
-                                    <img 
-                                      src={currentIconUrl} 
-                                      alt={`Icon ${num}`} 
-                                      className="w-12 h-12 object-contain rounded border border-gray-200 bg-white p-1" 
-                                    />
-                                    <span className="text-xs text-gray-500">Icon Preview</span>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-12 h-12 rounded-full bg-[#8DC63F]/10 flex items-center justify-center">
-                                      <i className={`${currentIconUrl} text-[#8DC63F] text-2xl`}></i>
+                                <div className="flex items-center justify-between gap-2">
+                                  {isIconImage ? (
+                                    <div className="flex items-center gap-2">
+                                      <img 
+                                        src={currentIconUrl} 
+                                        alt={`Icon ${num}`} 
+                                        className="w-12 h-12 object-contain rounded border border-gray-200 bg-white p-1" 
+                                      />
+                                      <span className="text-xs text-gray-500">Icon Preview</span>
                                     </div>
-                                    <span className="text-xs text-gray-500">RemixIcon Preview</span>
-                                  </div>
-                                )}
+                                  ) : (
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-12 h-12 rounded-full bg-[#8DC63F]/10 flex items-center justify-center">
+                                        <i className={`${currentIconUrl} text-[#8DC63F] text-2xl`}></i>
+                                      </div>
+                                      <span className="text-xs text-gray-500">RemixIcon Preview</span>
+                                    </div>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveFile(iconFieldName, currentIconUrl)}
+                                    className="px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+                                    title="Remove icon"
+                                  >
+                                    <i className="ri-delete-bin-line"></i>
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>
@@ -541,16 +626,43 @@ export default function AdminProductsPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => {
                   const images = getFieldValue('gallery', 'images') || [];
                   const imageUrl = images[num - 1] || '';
+                  const fieldName = `image_${num}`;
+                  const currentImageUrl = iconUrls[fieldName] || imageUrl;
                   return (
                     <div key={num} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Image {num} URL</label>
-                      <input type="text" name={`image_${num}`} defaultValue={imageUrl} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/image.jpg" />
-                      <div className="mt-2">
-                        <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, `image_${num}`)} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer" />
+                      <div className="flex gap-2">
+                        <input type="text" name={fieldName} defaultValue={currentImageUrl} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/image.jpg" />
+                        {currentImageUrl && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveFile(fieldName, currentImageUrl)}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+                            title="Remove image"
+                          >
+                            <i className="ri-delete-bin-line mr-1"></i>Remove
+                          </button>
+                        )}
                       </div>
-                      {imageUrl && (
+                      <div className="mt-2">
+                        <label className="block text-xs text-gray-600 mb-1">Or upload image:</label>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={(e) => handleImageUpload(e, fieldName)} 
+                          disabled={uploadingIcons[fieldName]}
+                          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" 
+                        />
+                        {uploadingIcons[fieldName] && (
+                          <div className="mt-1 text-xs text-blue-600 flex items-center">
+                            <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Uploading...
+                          </div>
+                        )}
+                      </div>
+                      {currentImageUrl && (
                         <div className="mt-2">
-                          <img src={imageUrl} alt={`Preview ${num}`} className="w-full h-32 object-cover rounded-lg border border-gray-200" />
+                          <img src={currentImageUrl} alt={`Preview ${num}`} className="w-full h-32 object-cover rounded-lg border border-gray-200" />
                         </div>
                       )}
                     </div>
@@ -580,8 +692,21 @@ export default function AdminProductsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Brochure URL</label>
-                  <input type="text" name="brochureUrl" defaultValue={getFieldValue('brochure', 'brochureUrl')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/brochure.pdf" />
+                  <div className="flex gap-2">
+                    <input type="text" name="brochureUrl" defaultValue={getFieldValue('brochure', 'brochureUrl')} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/brochure.pdf" />
+                    {getFieldValue('brochure', 'brochureUrl') && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFile('brochureUrl', getFieldValue('brochure', 'brochureUrl'))}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+                        title="Remove file"
+                      >
+                        <i className="ri-delete-bin-line mr-1"></i>Remove
+                      </button>
+                    )}
+                  </div>
                   <div className="mt-2">
+                    <label className="block text-xs text-gray-600 mb-1">Or upload file:</label>
                     <input 
                       type="file" 
                       accept=".pdf,.doc,.docx,.xls,.xlsx" 

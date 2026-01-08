@@ -104,13 +104,14 @@ export default function GallerySection() {
           {images.map((image, index) => (
             <div 
               key={index} 
-              className="relative overflow-hidden group cursor-pointer h-80"
+              className="relative overflow-hidden group cursor-pointer h-64 sm:h-72 md:h-80"
               onClick={() => openModal(image)}
             >
               <img 
                 src={image} 
                 alt={`Gallery ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
@@ -121,24 +122,25 @@ export default function GallerySection() {
       {/* Image Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-2 sm:p-4"
           onClick={closeModal}
         >
           <button
             onClick={closeModal}
-            className="absolute top-4 right-4 text-white hover:text-[#8DC63F] transition-colors z-10"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white hover:text-[#8DC63F] transition-colors z-10 p-2"
             aria-label="Close modal"
           >
-            <i className="ri-close-line text-4xl"></i>
+            <i className="ri-close-line text-3xl sm:text-4xl"></i>
           </button>
           <div 
-            className="relative max-w-7xl max-h-full"
+            className="relative max-w-7xl w-full max-h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <img 
               src={selectedImage} 
               alt="Gallery fullscreen"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              className="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain rounded-lg"
+              loading="eager"
             />
           </div>
         </div>

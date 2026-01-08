@@ -66,10 +66,10 @@ export default function BrochureSection() {
   }
 
   return (
-    <section className="py-16 bg-[#8DC63F]">
+    <section className="py-12 sm:py-16 bg-[#8DC63F]">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <h2 className="text-white text-3xl lg:text-4xl font-bold">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 text-center md:text-left">
+          <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">
             {content.title || defaultContent.title}
           </h2>
           
@@ -77,7 +77,7 @@ export default function BrochureSection() {
             href={content.brochureUrl || defaultContent.brochureUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-white hover:bg-gray-100 text-gray-900 text-lg font-bold px-10 py-4 transition-all duration-300 cursor-pointer whitespace-nowrap"
+            className="inline-block bg-white hover:bg-gray-100 text-gray-900 text-base sm:text-lg font-bold px-8 sm:px-10 py-3 sm:py-4 transition-all duration-300 cursor-pointer w-full sm:w-auto"
           >
             {content.buttonText || defaultContent.buttonText}
           </a>
