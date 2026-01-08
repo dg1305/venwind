@@ -7,6 +7,7 @@ export default function AdminProductsPage() {
   const { getFieldValue, loading, refreshData } = useCMSData('products');
   const [uploadingIcons, setUploadingIcons] = useState<Record<string, boolean>>({});
   const [iconUrls, setIconUrls] = useState<Record<string, string>>({});
+  const [uploadingFiles, setUploadingFiles] = useState<Record<string, boolean>>({});
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const file = e.target.files?.[0];
@@ -60,6 +61,81 @@ export default function AdminProductsPage() {
       alert('Failed to upload icon. Please try again.');
     } finally {
       setUploadingIcons(prev => ({ ...prev, [uploadKey]: false }));
+      e.target.value = '';
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type (allow PDF, DOC, DOCX, XLS, XLSX)
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ];
+    
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(pdf|doc|docx|xls|xlsx)$/i)) {
+      alert('Please upload a valid document file (PDF, DOC, DOCX, XLS, XLSX)');
+      e.target.value = '';
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size is too large. Maximum size is 10MB.');
+      e.target.value = '';
+      return;
+    }
+
+    const uploadKey = fieldName;
+    setUploadingFiles(prev => ({ ...prev, [uploadKey]: true }));
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      // Use relative path if API_BASE_URL is empty (works with Vite proxy)
+      const uploadUrl = API_BASE_URL ? `${API_BASE_URL}/api/upload/file` : '/api/upload/file';
+      
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.fileUrl) {
+          // Construct full URL - if API_BASE_URL is empty, use relative path
+          const fullUrl = API_BASE_URL 
+            ? `${API_BASE_URL}${result.fileUrl}` 
+            : result.fileUrl;
+          
+          // Update the input field
+          const input = document.querySelector(`input[name="${fieldName}"]`) as HTMLInputElement;
+          if (input) {
+            input.value = fullUrl;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          
+          alert('File uploaded successfully! Click "Save Changes" to save.');
+        } else {
+          alert('Failed to upload file: ' + (result.error || 'Unknown error'));
+        }
+      } else {
+        const errorText = await response.text();
+        alert('Failed to upload file. Please try again.');
+        console.error('Upload error:', errorText);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Failed to upload file. Please try again.');
+    } finally {
+      setUploadingFiles(prev => ({ ...prev, [uploadKey]: false }));
       e.target.value = '';
     }
   };
@@ -468,7 +544,7 @@ export default function AdminProductsPage() {
                   return (
                     <div key={num} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Image {num} URL</label>
-                      <input type="url" name={`image_${num}`} defaultValue={imageUrl} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/image.jpg" />
+                      <input type="text" name={`image_${num}`} defaultValue={imageUrl} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/image.jpg" />
                       <div className="mt-2">
                         <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, `image_${num}`)} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer" />
                       </div>
@@ -504,7 +580,22 @@ export default function AdminProductsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Brochure URL</label>
-                  <input type="url" name="brochureUrl" defaultValue={getFieldValue('brochure', 'brochureUrl')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/brochure.pdf" />
+                  <input type="text" name="brochureUrl" defaultValue={getFieldValue('brochure', 'brochureUrl')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/brochure.pdf" />
+                  <div className="mt-2">
+                    <input 
+                      type="file" 
+                      accept=".pdf,.doc,.docx,.xls,.xlsx" 
+                      onChange={(e) => handleFileUpload(e, 'brochureUrl')} 
+                      disabled={uploadingFiles['brochureUrl']}
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" 
+                    />
+                    {uploadingFiles['brochureUrl'] && (
+                      <div className="mt-1 text-xs text-blue-600 flex items-center">
+                        <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Uploading...
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <button type="submit" className="w-full px-6 py-3 bg-[#8DC63F] text-white rounded-lg hover:bg-[#7AB62F] transition-colors">
                   <i className="ri-save-line mr-2"></i>Save Changes
