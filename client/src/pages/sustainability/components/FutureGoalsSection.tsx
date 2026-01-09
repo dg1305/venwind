@@ -47,7 +47,7 @@ export default function FutureGoalsSection() {
 
   return (
     <section 
-      className="relative bg-cover bg-center py-32 lg:py-40 overflow-hidden"
+      className="relative bg-cover bg-center py-16 sm:py-24 lg:py-32 xl:py-40 overflow-hidden"
       style={{
         backgroundImage: `url(${displayContent.bgImageUrl})`,
         position: 'relative',
@@ -61,18 +61,18 @@ export default function FutureGoalsSection() {
       
       {/* Content on top - Always visible, even during loading */}
       <div 
-        className="relative max-w-7xl mx-auto px-6 lg:px-16"
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-16"
         style={{ zIndex: 10, position: 'relative' }}
       >
         <div className="max-w-2xl" data-aos="fade-up">
           <h2 
-            className="text-white text-4xl lg:text-5xl font-bold mb-8 drop-shadow-lg" 
+            className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 lg:mb-8 drop-shadow-lg" 
             style={{ position: 'relative', zIndex: 11 }}
           >
             {displayContent.title}
           </h2>
           <p 
-            className="text-white text-xl lg:text-2xl leading-relaxed drop-shadow-md" 
+            className="text-white text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed drop-shadow-md" 
             style={{ position: 'relative', zIndex: 11 }}
           >
             {displayContent.description}

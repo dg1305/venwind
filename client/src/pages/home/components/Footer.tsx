@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { normalizeImageUrl } from '../../../utils/cms';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 interface FooterData {
   logoUrl?: string;
+  imageUrl?: string;
   description?: string;
   email?: string;
   phone?: string;
@@ -72,9 +74,13 @@ export default function Footer() {
           <div data-aos="fade-up" data-aos-delay="0">
             {footerData.logoUrl ? (
               <img 
-                src={footerData.logoUrl} 
+                src={normalizeImageUrl(footerData.logoUrl)} 
                 alt="Venwind Refex" 
                 className="h-12 w-auto mb-6"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "https://venwindrefex.com/wp-content/uploads/2023/11/Venwind_Logo_Final-white.png";
+                }}
               />
             ) : (
               <img 
@@ -84,7 +90,17 @@ export default function Footer() {
               />
             )}
             {footerData.description && (
-              <p className="text-gray-300 text-sm leading-relaxed">{footerData.description}</p>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">{footerData.description}</p>
+            )}
+            {footerData.imageUrl && (
+              <div className="mt-4">
+                <img 
+                  src={normalizeImageUrl(footerData.imageUrl)} 
+                  alt="Footer image" 
+                  className="max-w-full h-auto object-contain rounded"
+                  style={{ maxHeight: '200px' }}
+                />
+              </div>
             )}
           </div>
 

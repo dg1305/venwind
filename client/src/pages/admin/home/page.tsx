@@ -786,6 +786,92 @@ export default function AdminHomePage() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Footer</h2>
             <form onSubmit={(e) => handleSubmit(e, 'footer')}>
               <div className="space-y-4">
+                {/* Logo Section */}
+                <div className="border-b border-gray-200 pb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Footer Logo</label>
+                  <p className="text-xs text-gray-500 mb-3">Logo displayed at the top of the footer</p>
+                  <div className="flex gap-2 mb-2">
+                    <input type="text" name="logoUrl" defaultValue={getFieldValue('footer', 'logoUrl')} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/logo.png or /uploads/images/logo.png" />
+                    {hasImage('logoUrl', 'footer') && (
+                      <button
+                        type="button"
+                        onClick={() => handleImageDelete('logoUrl')}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+                        title="Delete logo"
+                      >
+                        <i className="ri-delete-bin-line"></i>
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-xs text-gray-600 mb-1">Upload logo from local:</label>
+                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'logoUrl')} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer" />
+                  </div>
+                  {getFieldValue('footer', 'logoUrl') && (
+                    <div className="mt-3">
+                      <label className="block text-xs text-gray-600 mb-1">Logo Preview:</label>
+                      <div className="border border-gray-200 rounded-lg p-2 bg-gray-50">
+                        <img 
+                          src={normalizeImageUrl(getFieldValue('footer', 'logoUrl'))} 
+                          alt="Footer logo preview" 
+                          className="h-12 w-auto object-contain"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = '<p class="text-xs text-red-500">Failed to load logo preview</p>';
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer Image Section */}
+                <div className="border-b border-gray-200 pb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Footer Image</label>
+                  <p className="text-xs text-gray-500 mb-3">Additional image that can be displayed in the footer (optional)</p>
+                  <div className="flex gap-2 mb-2">
+                    <input type="text" name="imageUrl" defaultValue={getFieldValue('footer', 'imageUrl')} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="https://example.com/footer-image.jpg or /uploads/images/footer-image.jpg" />
+                    {hasImage('imageUrl', 'footer') && (
+                      <button
+                        type="button"
+                        onClick={() => handleImageDelete('imageUrl')}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+                        title="Delete image"
+                      >
+                        <i className="ri-delete-bin-line"></i>
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-xs text-gray-600 mb-1">Upload image from local:</label>
+                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'imageUrl')} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#8DC63F] file:text-white hover:file:bg-[#7AB62F] file:cursor-pointer" />
+                  </div>
+                  {getFieldValue('footer', 'imageUrl') && (
+                    <div className="mt-3">
+                      <label className="block text-xs text-gray-600 mb-1">Image Preview:</label>
+                      <div className="border border-gray-200 rounded-lg p-2 bg-gray-50">
+                        <img 
+                          src={normalizeImageUrl(getFieldValue('footer', 'imageUrl'))} 
+                          alt="Footer image preview" 
+                          className="max-w-full h-auto max-h-48 object-contain rounded"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = '<p class="text-xs text-red-500">Failed to load image preview</p>';
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Company Description</label>
                   <textarea name="description" defaultValue={getFieldValue('footer', 'description')} rows={3} maxLength={500} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8DC63F] focus:border-transparent" placeholder="Leading manufacturer of wind turbines..." />

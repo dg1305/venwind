@@ -78,8 +78,8 @@ export default function CommitmentSection() {
 
   if (loading) {
     return (
-      <section className="bg-white py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-6 lg:px-16">
+      <section className="bg-white py-12 sm:py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
           <div className="flex items-center justify-center">
             <div className="w-16 h-16 border-4 border-[#8DC63F] border-t-transparent rounded-full animate-spin"></div>
           </div>
@@ -91,15 +91,15 @@ export default function CommitmentSection() {
   const commitments = content.items || defaultCommitments;
 
   return (
-    <section className="bg-white py-20 lg:py-24">
-      <div className="max-w-7xl mx-auto px-6 lg:px-16">
+    <section className="bg-white py-12 sm:py-16 lg:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
         <h2 
-          className="text-gray-900 text-4xl lg:text-5xl font-bold text-center mb-16"
+          className="text-gray-900 text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-8 sm:mb-12 lg:mb-16"
           data-aos="fade-up"
         >
           {content.title || 'Our Commitment'}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           {commitments.map((item, index) => (
             <div 
               key={index}
@@ -107,17 +107,17 @@ export default function CommitmentSection() {
               data-aos="fade-up"
               data-aos-delay={index * 150}
             >
-              <div className="mb-6 overflow-hidden rounded-lg shadow-lg">
+              <div className="mb-4 sm:mb-6 overflow-hidden rounded-lg shadow-lg">
                 <img
                   src={item.image}
                   alt={item.title}
                   className="w-full h-auto object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                 />
               </div>
-              <h3 className="text-gray-900 text-xl lg:text-2xl font-bold mb-4">
+              <h3 className="text-gray-900 text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4">
                 {item.title}
               </h3>
-              <p className="text-gray-700 text-base leading-relaxed">
+              <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
                 {item.description}
               </p>
             </div>
